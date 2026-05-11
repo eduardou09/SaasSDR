@@ -32,25 +32,30 @@ class Settings(BaseSettings):
     # Database
     # -------------------------------------------------------------------------
     database_url: str  # asyncpg
-    sync_database_url: str  # psycopg2 / sync (Alembic)
+    sync_database_url: str = ""  # psycopg2 / sync (Alembic) — derivado de database_url se vazio
 
     @field_validator("database_url", mode="before")
     @classmethod
     def fix_async_db_url(cls, v: str) -> str:
-        """Railway injeta postgresql:// mas asyncpg precisa de postgresql+asyncpg://"""
-        if v.startswith("postgresql://"):
-            return v.replace("postgresql://", "postgresql+asyncpg://", 1)
-        if v.startswith("postgres://"):
-            return v.replace("postgres://", "postgresql+asyncpg://", 1)
+        """Normaliza para postgresql+asyncpg:// independente do formato recebido."""
+        for prefix in ("postgresql+asyncpg://", "postgresql://", "postgres://"):
+            if v.startswith(prefix):
+                return "postgresql+asyncpg://" + v[len(prefix):]
         return v
 
-    @field_validator("sync_database_url", mode="before")
-    @classmethod
-    def fix_sync_db_url(cls, v: str) -> str:
-        """Garante prefixo correto para psycopg2"""
-        if v.startswith("postgres://"):
-            return v.replace("postgres://", "postgresql://", 1)
-        return v
+    @model_validator(mode="after")
+    def derive_sync_url(self) -> "Settings":
+        """Se SYNC_DATABASE_URL não foi configurado, deriva de DATABASE_URL (remove +asyncpg)."""
+        if not self.sync_database_url:
+            self.sync_database_url = self.database_url.replace(
+                "postgresql+asyncpg://", "postgresql://", 1
+            )
+        else:
+            # Garante que não tem driver async no sync URL
+            self.sync_database_url = self.sync_database_url.replace(
+                "postgresql+asyncpg://", "postgresql://"
+            ).replace("postgres://", "postgresql://")
+        return self
 
     # -------------------------------------------------------------------------
     # Redis
