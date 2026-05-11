@@ -4,7 +4,8 @@ import { NextResponse } from "next/server";
 const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
-  "/api/webhooks(.*)", // Webhooks são autenticados por assinatura, não por Clerk
+  "/api/ping",
+  "/api/webhooks(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, request) => {
