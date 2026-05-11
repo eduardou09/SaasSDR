@@ -1,10 +1,19 @@
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
-// Middleware temporariamente sem Clerk para diagnóstico do 500
-export function middleware(_request: NextRequest) {
-  return NextResponse.next();
-}
+const isPublicRoute = createRouteMatcher([
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/api/ping",
+  "/api/webhooks(.*)",
+]);
+
+export default clerkMiddleware(async (auth, request) => {
+  if (isPublicRoute(request)) {
+    return NextResponse.next();
+  }
+  await auth.protect();
+});
 
 export const config = {
   matcher: [
