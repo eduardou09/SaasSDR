@@ -66,7 +66,8 @@
       "Bash(curl -s -i -X OPTIONS http://localhost:8000/api/v1/settings/llm \\\\\n  -H \"Origin: http://localhost:3000\" \\\\\n  -H \"Access-Control-Request-Method: POST\" \\\\\n  -H \"Access-Control-Request-Headers: authorization,content-type\" 2>&1 | head -15)",
       "Bash(sleep 2 && curl -s -i -X OPTIONS http://localhost:8000/api/v1/settings/llm \\\\\n  -H \"Origin: http://localhost:3000\" \\\\\n  -H \"Access-Control-Request-Method: POST\" \\\\\n  -H \"Access-Control-Request-Headers: authorization,content-type\" 2>&1 | head -8)",
       "Bash(curl -sv http://localhost:8000/api/v1/settings/llm \\\\\n  -H \"Origin: http://localhost:3000\" 2>&1 | grep -E \"< HTTP|< access-control|Connected|Failed|refused\")",
-      "Bash(curl -s http://127.0.0.1:8000/docs | head -5)"
+      "Bash(curl -s http://127.0.0.1:8000/docs | head -5)",
+      "Bash(openssl rand:*)"
     ]
   }
 }

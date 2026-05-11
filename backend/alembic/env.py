@@ -40,9 +40,10 @@ def run_migrations_offline() -> None:
 
 def run_migrations_online() -> None:
     """Conecta ao banco e executa as migrations de forma síncrona."""
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
+    from sqlalchemy import create_engine
+
+    connectable = create_engine(
+        settings.sync_database_url,
         poolclass=pool.NullPool,
     )
     with connectable.connect() as connection:

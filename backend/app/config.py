@@ -34,6 +34,24 @@ class Settings(BaseSettings):
     database_url: str  # asyncpg
     sync_database_url: str  # psycopg2 / sync (Alembic)
 
+    @field_validator("database_url", mode="before")
+    @classmethod
+    def fix_async_db_url(cls, v: str) -> str:
+        """Railway injeta postgresql:// mas asyncpg precisa de postgresql+asyncpg://"""
+        if v.startswith("postgresql://"):
+            return v.replace("postgresql://", "postgresql+asyncpg://", 1)
+        if v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql+asyncpg://", 1)
+        return v
+
+    @field_validator("sync_database_url", mode="before")
+    @classmethod
+    def fix_sync_db_url(cls, v: str) -> str:
+        """Garante prefixo correto para psycopg2"""
+        if v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql://", 1)
+        return v
+
     # -------------------------------------------------------------------------
     # Redis
     # -------------------------------------------------------------------------
