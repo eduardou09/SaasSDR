@@ -28,8 +28,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.0.0",
     "geist": "^1.7.0",
-
-    "next": "15.3.2",
+    "next": "^15.5.18",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "socket.io-client": "^4.8.1",
