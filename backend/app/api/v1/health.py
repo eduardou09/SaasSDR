@@ -21,6 +21,11 @@ from app.schemas.common import HealthResponse
 router = APIRouter(tags=["health"])
 
 
+@router.get("/ping", summary="Ping público")
+async def ping() -> dict:
+    return {"status": "ok"}
+
+
 @router.get("/health", response_model=HealthResponse, summary="Health check autenticado")
 async def health(request: Request, db: TenantDB) -> HealthResponse:
     """

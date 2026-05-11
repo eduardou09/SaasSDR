@@ -43,6 +43,7 @@ _jwks_client = PyJWKClient(
 # Rotas públicas que não precisam de autenticação
 PUBLIC_PATHS = {
     "/health",
+    "/api/v1/ping",
     "/docs",
     "/redoc",
     "/openapi.json",
