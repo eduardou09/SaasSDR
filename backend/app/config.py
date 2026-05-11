@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     @classmethod
     def fix_async_db_url(cls, v: str) -> str:
         """Normaliza para postgresql+asyncpg:// independente do formato recebido."""
+        v = v.strip()
         for prefix in ("postgresql+asyncpg://", "postgresql://", "postgres://"):
             if v.startswith(prefix):
                 return "postgresql+asyncpg://" + v[len(prefix):]
@@ -52,7 +53,7 @@ class Settings(BaseSettings):
             )
         else:
             # Garante que não tem driver async no sync URL
-            self.sync_database_url = self.sync_database_url.replace(
+            self.sync_database_url = self.sync_database_url.strip().replace(
                 "postgresql+asyncpg://", "postgresql://"
             ).replace("postgres://", "postgresql://")
         return self
