@@ -1,5 +1,7 @@
 import { Sidebar } from "@/components/features/sidebar";
 
+export const dynamic = "force-dynamic";
+
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen overflow-hidden bg-background">
