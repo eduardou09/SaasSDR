@@ -29,6 +29,10 @@ async def ping() -> dict:
         "status": "ok",
         "api_public_base_url": settings.api_public_base_url,
         "env_raw": os.environ.get("API_PUBLIC_BASE_URL", "NOT SET"),
+        "railway_service": os.environ.get("RAILWAY_SERVICE_NAME", "NOT SET"),
+        "railway_env": os.environ.get("RAILWAY_ENVIRONMENT_NAME", "NOT SET"),
+        "hostname": os.environ.get("HOSTNAME", "NOT SET"),
+        "port": os.environ.get("PORT", "NOT SET"),
     }
 
 
