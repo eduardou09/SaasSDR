@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_BASE = process.env.BACKEND_INTERNAL_URL ?? "http://127.0.0.1:8000";
-
 async function proxy(req: NextRequest, path: string[]) {
-  const target = `${BACKEND_BASE}/api/v1/${path.join("/")}${req.nextUrl.search}`;
+  const backendBase = process.env.BACKEND_INTERNAL_URL ?? "http://127.0.0.1:8000";
+  const target = `${backendBase}/api/v1/${path.join("/")}${req.nextUrl.search}`;
 
   const headers = new Headers();
   const auth = req.headers.get("authorization");
