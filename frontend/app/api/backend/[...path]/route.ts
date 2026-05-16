@@ -18,12 +18,22 @@ async function proxy(req: NextRequest, path: string[]) {
   const body =
     method === "GET" || method === "HEAD" ? undefined : await req.text();
 
-  const res = await fetch(target, {
-    method,
-    headers,
-    body,
-    cache: "no-store",
-  });
+  let res: Response;
+  try {
+    res = await fetch(target, {
+      method,
+      headers,
+      body,
+      cache: "no-store",
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error(`[proxy] fetch failed — target=${target} error=${message}`);
+    return new NextResponse(
+      JSON.stringify({ detail: `Proxy error: ${message}`, target }),
+      { status: 502, headers: { "content-type": "application/json" } },
+    );
+  }
 
   const responseBody = await res.text();
   return new NextResponse(responseBody, {
