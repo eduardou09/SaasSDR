@@ -574,12 +574,3 @@ async def simulate_agent(
         payload={"provider": provider, "model": model, "reply_preview": reply[:250]},
     )
     return AgentSimulateResponse(reply=reply, provider=provider, model=model)
-    await _log_agent_event(
-        db,
-        tenant_id=request.state.tenant_id,
-        agent_id=agent.id,
-        level="info",
-        event_type="simulation.message_received",
-        message="Mensagem recebida no simulador",
-        payload={"message_preview": body.message[:200]},
-    )
