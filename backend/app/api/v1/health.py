@@ -23,7 +23,8 @@ router = APIRouter(tags=["health"])
 
 @router.get("/ping", summary="Ping público")
 async def ping() -> dict:
-    return {"status": "ok"}
+    from app.config import settings
+    return {"status": "ok", "api_public_base_url": settings.api_public_base_url}
 
 
 @router.get("/health", response_model=HealthResponse, summary="Health check autenticado")
